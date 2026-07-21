@@ -1,0 +1,45 @@
+# Legal Knowledge Manager — Python dependencies
+# All packages are free and open source. Install with:
+#   pip install -r backend/requirements.txt
+#
+# Stage 1 (database init) needs NOTHING from this file — it is stdlib-only.
+# Install this file when you begin Stage 2.
+
+# ---- Core backend (Stage 2) ------------------------------------------------
+# (Database access and configuration are deliberately standard-library only —
+#  no ORM, no aiosqlite, no pydantic-settings — fewer moving parts to install.)
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.8
+httpx>=0.27                # also used by scripts/dev_check.py and Stage 6
+python-multipart>=0.0.9    # CSV upload endpoint
+
+# ---- Website analysis & downloading (Stage 4) ------------------------------
+# (Page fetching, HTML parsing and file downloading are deliberately
+#  standard-library — no requests, no beautifulsoup4, no lxml. The one real
+#  dependency is the headless browser, needed only for JavaScript-built pages
+#  such as the MCA V3 portal.)
+playwright>=1.46
+# After installing playwright, run once to fetch its browser (~150 MB):
+#   playwright install chromium
+
+# ---- PDF processing & OCR (Stage 5) ----------------------------------------
+pdfplumber>=0.11
+pypdf>=4.3
+pdf2image>=1.17          # needs Poppler binaries on Windows (see Stage 5 docs)
+Pillow>=10.4
+pytesseract>=0.3.10      # needs the Tesseract program installed (Stage 5 docs)
+
+# PaddleOCR is installed separately in Stage 5 because its wheels are large
+# and platform-specific:
+#   pip install paddlepaddle paddleocr
+# The app falls back to Tesseract automatically if PaddleOCR is unavailable.
+
+# ---- Local AI (Stage 6) -----------------------------------------------------
+# No package needed: the app talks to Ollama's local HTTP API via httpx.
+# Install Ollama from https://ollama.com and pull a model, e.g.:
+#   ollama pull qwen2.5:7b-instruct
+
+# ---- Development (optional) --------------------------------------------------
+pytest>=8.2
+pytest-asyncio>=0.23

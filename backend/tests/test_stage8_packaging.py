@@ -155,9 +155,14 @@ class TestFrozenPaths(unittest.TestCase):
                 bundle, {"LKM_HOME": str(Path(tmp) / "MyLibrary")},
             )
             self.assertEqual(frozen, "True")
-            self.assertEqual(schema, str(bundle / "db" / "schema.sql"))
-            self.assertEqual(migrations, str(bundle / "db" / "migrations"))
-            self.assertEqual(home, str(Path(tmp) / "MyLibrary"))
+            self.assertEqual(Path(schema), bundle / "db" / "schema.sql")
+            self.assertEqual(Path(migrations), bundle / "db" / "migrations")
+            # Compare resolved Paths, not strings: Windows may spell the same
+            # folder two ways (8.3 short names like RUNNER~1 vs the real
+            # name), and resolve() normalises both spellings.
+            self.assertEqual(
+                Path(home).resolve(), (Path(tmp) / "MyLibrary").resolve()
+            )
 
     def test_without_lkm_home_falls_back_to_home_folder(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
@@ -167,7 +172,8 @@ class TestFrozenPaths(unittest.TestCase):
                 Path(tmp) / "_internal", {"HOME": tmp, "USERPROFILE": tmp}
             )
             self.assertEqual(
-                home, str((Path(tmp) / "Legal Knowledge Manager").resolve())
+                Path(home).resolve(),
+                (Path(tmp) / "Legal Knowledge Manager").resolve(),
             )
 
 

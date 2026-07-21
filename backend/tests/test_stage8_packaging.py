@@ -69,10 +69,10 @@ class TestIconGenerator(unittest.TestCase):
                 self.assertEqual(header_size, 40)        # BITMAPINFOHEADER
                 self.assertEqual(double_height, width * 2)  # XOR + AND mask
 
-    def test_standalone_png_exists_and_is_256(self) -> None:
+    def test_standalone_png_exists_and_is_512_for_mac_icns(self) -> None:
         self.assertEqual(self.png[:8], b"\x89PNG\r\n\x1a\n")
         width, height = struct.unpack(">II", self.png[16:24])
-        self.assertEqual((width, height), (256, 256))
+        self.assertEqual((width, height), (512, 512))  # macOS icns source
 
     def test_repository_copy_matches_generator_output(self) -> None:
         """The committed icon.ico is the generator's output.
@@ -205,6 +205,11 @@ class TestPackagingIngredients(unittest.TestCase):
         self.assertEqual(build["win"]["icon"], "build/icon.ico")
         self.assertTrue(
             (PROJECT_ROOT / "frontend" / build["win"]["icon"]).is_file()
+        )
+        mac_targets = str(build["mac"]["target"])
+        self.assertIn("dmg", mac_targets)
+        self.assertTrue(
+            (PROJECT_ROOT / "frontend" / build["mac"]["icon"]).is_file()
         )
         extra = build["extraResources"][0]
         self.assertEqual(extra["from"], "../backend-dist/lkm-backend")

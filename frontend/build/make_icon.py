@@ -141,7 +141,9 @@ def main() -> None:
         frames[size] = encode_ico_bmp(downscale(draw_mark(source), size))
 
     (HERE / "icon.ico").write_bytes(build_ico(frames))
-    (HERE / "icon.png").write_bytes(encode_png(full))
+    # macOS: electron-builder converts a >=512 px PNG into the .icns it
+    # needs, so the standalone PNG is rendered at 512 (the mark scales).
+    (HERE / "icon.png").write_bytes(encode_png(draw_mark(512)))
     print(f"Wrote {HERE / 'icon.ico'} and icon.png")
 
 

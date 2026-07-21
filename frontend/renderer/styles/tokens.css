@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Legal Knowledge Manager — design tokens
+   --------------------------------------------------------------------------
+   The visual language is grounded in the Indian legal registry world:
+
+   • Paper:   the pale GREEN LEGAL PAPER Indian court filings are made on —
+              the light theme's background is that paper, not generic white.
+   • Ink:     fountain-pen blue-black for text; "office ink" blue for
+              interactive elements.
+   • Tape:    "red tape" crimson — reserved for the review queue, errors and
+              destructive actions only. If it's red, it needs a human.
+   • Stamp:   muted stamp-pad green for success/completed states.
+   • Spines:  every document row carries a coloured left spine encoding its
+              authority (RBI, SEBI, MCA…) — the docket-spine signature.
+
+   Type roles (IBM Plex, bundled offline via @fontsource):
+   • Plex Serif — page titles & document titles (the gazette voice)
+   • Plex Sans  — interface text
+   • Plex Mono  — dates, hashes, counts, status codes (registry precision)
+   ========================================================================== */
+
+:root {
+  /* ---- type ---- */
+  --font-display: "IBM Plex Serif", "Iowan Old Style", Georgia, serif;
+  --font-ui: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", "Cascadia Mono", Consolas, monospace;
+
+  --text-xs: 0.72rem;
+  --text-sm: 0.8rem;
+  --text-md: 0.875rem;
+  --text-lg: 1.05rem;
+  --text-xl: 1.35rem;
+  --text-2xl: 1.7rem;
+
+  /* ---- rhythm ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --sidebar-w: 216px;
+  --transition: 150ms ease;
+
+  /* ---- authority spine hues (fixed registry) ---- */
+  --spine-rbi: #29567d;      /* reserve-bank slate blue   */
+  --spine-sebi: #7d5a29;     /* market ochre              */
+  --spine-mca: #56297d;      /* registrar violet          */
+  --spine-tax: #295e46;      /* revenue green (CBDT/CBIC) */
+  --spine-irdai: #7d2947;    /* insurer maroon            */
+  --spine-other: #5b6770;    /* unclassified grey-blue    */
+}
+
+/* --------------------------------------------------------------------------
+   LIGHT — "green legal paper"
+   -------------------------------------------------------------------------- */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --paper: #eef1ea;          /* the green legal paper itself      */
+  --panel: #f7f8f4;          /* raised sheets on the paper        */
+  --panel-2: #e7ebe2;        /* inset wells, table headers        */
+  --line: #d3d9cc;           /* hairlines                         */
+  --line-strong: #b4bcaa;
+
+  --ink: #1c2733;            /* blue-black text                   */
+  --ink-2: #4c5a66;          /* secondary text                    */
+  --ink-3: #77828c;          /* placeholder / disabled            */
+
+  --accent: #204e8f;         /* office-ink blue (interactive)     */
+  --accent-hover: #17406f;
+  --accent-wash: #dfe7f2;    /* selected rows, focus washes       */
+
+  --tape: #a5323c;           /* red tape — review/errors only     */
+  --tape-wash: #f3e2e3;
+  --stamp: #2f6e4f;          /* stamp-pad green — success         */
+  --stamp-wash: #dfeee5;
+  --wait: #8a6d1f;           /* pending/queued amber              */
+  --wait-wash: #f2ecd8;
+
+  --shadow: 0 1px 3px rgba(28, 39, 51, 0.10);
+  --shadow-lg: 0 8px 28px rgba(28, 39, 51, 0.16);
+}
+
+/* --------------------------------------------------------------------------
+   DARK — "ink well": the same instrument at night
+   -------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #141b22;
+  --panel: #1b242d;
+  --panel-2: #222d38;
+  --line: #2e3a45;
+  --line-strong: #43525f;
+
+  --ink: #e6ebe7;
+  --ink-2: #a3aeb0;
+  --ink-3: #6e7a80;
+
+  --accent: #7aa5dd;
+  --accent-hover: #97bce9;
+  --accent-wash: #24344a;
+
+  --tape: #d4767e;
+  --tape-wash: #3c262b;
+  --stamp: #7fb598;
+  --stamp-wash: #22352c;
+  --wait: #cbA85a;
+  --wait-wash: #37311f;
+
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.55);
+
+  --spine-rbi: #5d8ab3;
+  --spine-sebi: #b3925d;
+  --spine-mca: #8f5db3;
+  --spine-tax: #5da886;
+  --spine-irdai: #b35d7e;
+  --spine-other: #7d8a94;
+}

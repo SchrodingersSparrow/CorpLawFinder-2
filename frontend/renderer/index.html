@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; connect-src http://127.0.0.1:* http://localhost:*; img-src 'self' data:; style-src 'self' 'unsafe-inline'; font-src 'self'" />
+    <title>Legal Knowledge Manager</title>
+
+    <!-- IBM Plex, bundled offline via @fontsource (npm install fetches them
+         once; the app never touches the network for fonts). If the packages
+         are missing the CSS system-font fallbacks apply. -->
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-sans/400.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-sans/500.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-sans/600.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-serif/400.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-serif/500.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-serif/600.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-mono/400.css" />
+    <link rel="stylesheet" href="../node_modules/@fontsource/ibm-plex-mono/500.css" />
+
+    <link rel="stylesheet" href="styles/tokens.css" />
+    <link rel="stylesheet" href="styles/app.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React 18 prebuilt bundles, loaded as-is: no bundler in this project. -->
+    <script src="../node_modules/react/umd/react.production.min.js"></script>
+    <script src="../node_modules/react-dom/umd/react-dom.production.min.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

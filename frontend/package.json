@@ -1,0 +1,70 @@
+{
+  "name": "legal-knowledge-manager",
+  "productName": "Legal Knowledge Manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private, offline-first document library for transaction lawyers",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "test": "node --test \"tests/*.test.mjs\"",
+    "dist": "electron-builder --win --x64",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.1.0",
+    "@fontsource/ibm-plex-sans": "^5.1.0",
+    "@fontsource/ibm-plex-serif": "^5.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "electron": "^33.3.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.legalknowledgemanager.desktop",
+    "productName": "Legal Knowledge Manager",
+    "copyright": "Free and open source",
+    "directories": {
+      "output": "dist-installer",
+      "buildResources": "build"
+    },
+    "files": [
+      "electron/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../backend-dist/lkm-backend",
+        "to": "backend"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Legal-Knowledge-Manager-Setup-${version}.exe",
+      "shortcutName": "Legal Knowledge Manager"
+    },
+    "linux": {
+      "target": "dir",
+      "icon": "build/icon.png"
+    },
+    "asar": true
+  }
+}

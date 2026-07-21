@@ -65,15 +65,27 @@ class TestApi(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(r.status_code, 404)
         self.assertEqual(r.json()["error"]["code"], "not_found")
 
-    async def test_source_roundtrip_and_stage_gate(self) -> None:
+    async def test_source_roundtrip_and_analyze_queues_real_job(self) -> None:
+        # A guaranteed-dead host (.invalid is reserved): the queued analysis
+        # task fails fast and deterministically — this test must never make
+        # the build machine fetch a real website.
         r = await self.client.post("/api/sources",
-                                   json={"url": "https://rbi.org.in/x"})
+                                   json={"url": "https://api-test.invalid/page"})
         self.assertEqual(r.status_code, 201)
         sid = r.json()["id"]
 
+        # Live since Stage 4: analyze answers 202 with a queued job.
         r = await self.client.post(f"/api/sources/{sid}/analyze")
-        self.assertEqual(r.status_code, 409)
-        self.assertEqual(r.json()["error"]["code"], "feature_not_available")
+        self.assertEqual(r.status_code, 202)
+        job = r.json()["job"]
+        self.assertEqual(job["task_type"], "analyze_source")
+        self.assertIn(job["status"], ("queued", "running", "failed"))
+
+        # The source flips to analyzing immediately; on a fast machine the
+        # doomed fetch may already have failed — both are correct.
+        r = await self.client.get(f"/api/sources/{sid}")
+        self.assertEqual(r.status_code, 200)
+        self.assertIn(r.json()["status"], ("analyzing", "failed"))
 
         r = await self.client.get("/api/sources")
         self.assertEqual(r.json()["total"], 1)

@@ -1,0 +1,71 @@
+# Builds the Windows installer on GitHub's servers (Stage 8, cloud edition).
+#
+# Runs automatically whenever files are uploaded to the repository, and can
+# also be started by hand: Actions tab -> "Build Windows installer" ->
+# "Run workflow". When it finishes (10-20 minutes), the installer is under
+# the run's "Artifacts" section: Legal-Knowledge-Manager-installer.zip,
+# containing Legal-Knowledge-Manager-Setup-1.0.0.exe.
+#
+# The build refuses to package anything unless all 196 tests pass first.
+
+name: Build Windows installer
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js (LTS)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Install backend packages
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r backend/requirements.txt
+          python -m pip install pyinstaller
+
+      - name: Backend tests (must pass to continue)
+        run: python -m unittest discover -s backend/tests
+
+      - name: API self-check (advisory — does not block the build)
+        continue-on-error: true
+        run: python backend/scripts/dev_check.py
+
+      - name: Freeze the backend into a self-contained engine
+        run: python backend/scripts/freeze_backend.py
+
+      - name: Install interface packages
+        working-directory: frontend
+        run: npm install
+
+      - name: Frontend tests (must pass to continue)
+        working-directory: frontend
+        run: npm test
+
+      - name: Build the installer
+        working-directory: frontend
+        run: npm run dist -- --publish never
+
+      - name: Offer the installer for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: Legal-Knowledge-Manager-installer
+          path: frontend/dist-installer/*.exe
+          if-no-files-found: error
+          retention-days: 90

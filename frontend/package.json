@@ -65,6 +65,19 @@
       "target": "dir",
       "icon": "build/icon.png"
     },
-    "asar": true
+    "asar": true,
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png",
+      "category": "public.app-category.productivity",
+      "artifactName": "Legal-Knowledge-Manager-${version}-mac.dmg"
+    }
   }
 }
